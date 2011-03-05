@@ -1,0 +1,20 @@
+This is the source code to my old IRC bot known as snackb0t. A lot of the
+code is less than optimal.
+
+It's lacking a lot of core functionality that should have been coded long
+ago like access control, so it isn't recommended to run this code base
+as-is.
+
+It used jdbc-postgresql and a hardcoded table layout for a backend. It
+expects to find a settings file in the same directory as the jar file with
+the following format:
+network=
+port=
+ident=
+identpassword=
+dbpath=jdbc:postgresql://path/to/database
+dbuser=
+dbpass=
+channels=#foo,#bar,#etc
+OS=
+Contact=
