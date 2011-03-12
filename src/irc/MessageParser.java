@@ -27,14 +27,13 @@ import modules.Snack;
 import modules.Weather;
 import modules.calc;
 import modules.gcalc;
-import config.Config;
 import database.Postgres;
 
 public class MessageParser {
     private IRCore irc;
 
-    private Postgres pg = Postgres.getInstance();
-    private Config config = Config.getInstance();
+    private final Postgres pg = Postgres.getInstance();
+
     private final IRCCtcp ctcpEngine = new IRCCtcp();
 
     private final Snack snackEngine = new Snack(pg);
@@ -76,6 +75,12 @@ public class MessageParser {
         if (type.equals("PRIVMSG")) {
             //log the message
             lastSpokeEngine.logLine(m.user, "#" + m.channel, m.msg);
+
+            // Ignore banned users from this point on
+            if (banEngine.isBanned(m.user)) {
+                return;
+            }
+
             /*
              * Handle CTCP {ugly}
              */
