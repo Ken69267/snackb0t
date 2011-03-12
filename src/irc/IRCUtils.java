@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2010 Kenneth Prugh
+ * Copyright (C) 2009-2011 Kenneth Prugh
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,10 +12,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class IRCUtils {
-	// :Ken69267!n=Ken69267@gentoo/developer/ken69267 PRIVMSG #gentoo-pr0n :ZOMG
-	// :biohazrd!n=biohazrd@c-71-195-210-252.hsd1.ut.comcast.net PRIVMSG
-	// #gentoo-pr0n :so
-
 	/**
 	 * @return user that sent this message
 	 * 
@@ -24,6 +20,38 @@ public class IRCUtils {
 	 */
 	public static String getSender(String message) {
 		Pattern pattern = Pattern.compile(":(.*?)!");
+		Matcher matcher = pattern.matcher(message);
+		if (matcher.find()) {
+			return matcher.group(1);
+		} else {
+			return "";
+		}
+	}
+
+	/**
+	 * @return user's ident that sent this message
+	 * 
+	 * @param message
+	 *            - The message to parse
+	 */
+	public static String getIdent(String message) {
+		Pattern pattern = Pattern.compile("!n=(.*?)@");
+		Matcher matcher = pattern.matcher(message);
+		if (matcher.find()) {
+			return matcher.group(1);
+		} else {
+			return "";
+		}
+	}
+
+	/**
+	 * @return user's hostname that sent this message
+	 * 
+	 * @param message
+	 *            - The message to parse
+	 */
+	public static String getHostname(String message) {
+		Pattern pattern = Pattern.compile("@(.*?) PRIVMSG");
 		Matcher matcher = pattern.matcher(message);
 		if (matcher.find()) {
 			return matcher.group(1);
@@ -65,13 +93,4 @@ public class IRCUtils {
 			return "";
 		}
 	}
-
-	//public static void main(String[] args) {
-	//	String moo =
-	//		":ed-|211!n=eplumlee@ip197-140.chouteautel.com PRIVMSG #gentoo-pr0n :!newsnack Ken69267: I just took a massive dum";
-	//	String moo1 = ":NetHawk!~nethawk@2002:5d67:1af8:1234:21f:e2ff:febc:9dd5 PRIVMSG #gentoo-pr0n :it kind of sucks to be ignored like that";
-	//	System.out.println(getChannel(moo));
-	//	System.out.println(getSender(moo));
-	//	System.out.println(getMessage(moo));
-	//}
 }
