@@ -90,6 +90,9 @@ public class MessageParser {
                 /*
                  * Its a user command
                  */
+
+                // TODO Actually check for authentication
+                authenticatedCommand(m);
                 parseCommand(m);
             }
 
