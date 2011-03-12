@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import config.Config;
 
 public class Postgres {
-    private Postgres _instance;
+    private static Postgres _instance;
 	private Connection db;
 
 	private Postgres() {
