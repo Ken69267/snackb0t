@@ -57,6 +57,7 @@ public class Config {
     public static synchronized Config getInstance() {
         if (_instance == null) {
             _instance = new Config();
+            return _instance;
         }
         else {
             return _instance;

@@ -43,7 +43,8 @@ public class Postgres {
 	 */
     public static synchronized Postgres getInstance() {
         if (_instance == null) {
-            _instance = new Config();
+            _instance = new Postgres();
+            return _instance;
         }
         else {
             return _instance;
