@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2010 Kenneth Prugh
+ * Copyright (C) 2009-2011 Kenneth Prugh
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,6 +13,8 @@ import java.io.FileInputStream;
 import java.util.Properties;
 
 public class Config {
+    private static Config _instance;
+
 	private Properties config;
 	private FileInputStream in;
 
@@ -25,7 +27,7 @@ public class Config {
 	private final String OS, Contact; /* CTCP */
 
     /* Perhaps specify the file in the constructor to allow multiple configs */
-	public Config() {
+	private Config() {
 		config = new Properties();
 		try {
 			in = new FileInputStream(".settings");
@@ -50,11 +52,16 @@ public class Config {
 	}
 
 	/**
-	 * @return the config
-	 */
-	public Properties getConfig() {
-		return config;
-	}
+     * @return the config
+     */
+    public static synchronized Config getInstance() {
+        if (_instance == null) {
+            _instance = new Config();
+        }
+        else {
+            return _instance;
+        }
+    }
 
 	/**
 	 * @return the network

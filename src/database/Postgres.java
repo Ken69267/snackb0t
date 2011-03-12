@@ -18,10 +18,11 @@ import java.sql.SQLException;
 import config.Config;
 
 public class Postgres {
-
+    private Postgres _instance;
 	private Connection db;
 
-	public Postgres(Config config) {
+	private Postgres() {
+        Config config = Config.getInstance();
 		try {
 			Class.forName("org.postgresql.Driver");
 			db = DriverManager.getConnection(config.getDbpath(),config.getDbuser(), config.getDbpass());
@@ -40,6 +41,15 @@ public class Postgres {
 	/**
 	 * Return Connection to postgresql
 	 */
+    public static synchronized Postgres getInstance() {
+        if (_instance == null) {
+            _instance = new Config();
+        }
+        else {
+            return _instance;
+        }
+    }
+
 	public Connection getConnection() {
 		return db;
 	}
