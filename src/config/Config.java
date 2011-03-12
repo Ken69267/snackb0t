@@ -15,28 +15,28 @@ import java.util.Properties;
 public class Config {
     private static Config _instance;
 
-	private Properties config;
-	private FileInputStream in;
+    private Properties config;
+    private FileInputStream in;
 
-	private final String network;
-	private final String port;
-	private final String ident;
-	private final String identpassword;
-	private final String dbpath, dbuser, dbpass;
-	private final String channels;
-	private final String OS, Contact; /* CTCP */
+    private final String network;
+    private final String port;
+    private final String ident;
+    private final String identpassword;
+    private final String dbpath, dbuser, dbpass;
+    private final String channels;
+    private final String OS, Contact; /* CTCP */
 
     /* Perhaps specify the file in the constructor to allow multiple configs */
-	private Config() {
-		config = new Properties();
-		try {
-			in = new FileInputStream(".settings");
-			config.load(in);
-			in.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
+    private Config() {
+        config = new Properties();
+        try {
+            in = new FileInputStream(".settings");
+            config.load(in);
+            in.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
 
         /* Setup */
         network = config.getProperty("network");
@@ -49,9 +49,9 @@ public class Config {
         channels = config.getProperty("channels");
         OS = config.getProperty("OS");
         Contact = config.getProperty("Contact");
-	}
+    }
 
-	/**
+    /**
      * @return the config
      */
     public static synchronized Config getInstance() {
@@ -64,73 +64,73 @@ public class Config {
         }
     }
 
-	/**
-	 * @return the network
-	 */
-	public String getNetwork() {
-		return network;
-	}
+    /**
+     * @return the network
+     */
+    public String getNetwork() {
+        return network;
+    }
 
-	/**
-	 * @return the port
-	 */
-	public String getPort() {
-		return port;
-	}
+    /**
+     * @return the port
+     */
+    public String getPort() {
+        return port;
+    }
 
-	/**
-	 * @return the ident
-	 */
-	public String getIdent() {
-		return ident;
-	}
+    /**
+     * @return the ident
+     */
+    public String getIdent() {
+        return ident;
+    }
 
-	/**
-	 * @return the identpassword
-	 */
-	public String getIdentpassword() {
-		return identpassword;
-	}
+    /**
+     * @return the identpassword
+     */
+    public String getIdentpassword() {
+        return identpassword;
+    }
 
-	/**
-	 * @return the dbpath
-	 */
-	public String getDbpath() {
-		return dbpath;
-	}
+    /**
+     * @return the dbpath
+     */
+    public String getDbpath() {
+        return dbpath;
+    }
 
-	/**
-	 * @return the dbuser
-	 */
-	public String getDbuser() {
-		return dbuser;
-	}
+    /**
+     * @return the dbuser
+     */
+    public String getDbuser() {
+        return dbuser;
+    }
 
-	/**
-	 * @return the dbpass
-	 */
-	public String getDbpass() {
-		return dbpass;
-	}
+    /**
+     * @return the dbpass
+     */
+    public String getDbpass() {
+        return dbpass;
+    }
 
-	/**
-	 * @return the channels
-	 */
-	public String getChannels() {
-		return channels;
-	}
+    /**
+     * @return the channels
+     */
+    public String getChannels() {
+        return channels;
+    }
 
-	/**
-	 * @return the oS
-	 */
-	public String getOS() {
-		return OS;
-	}
+    /**
+     * @return the oS
+     */
+    public String getOS() {
+        return OS;
+    }
 
-	/**
-	 * @return the contact
-	 */
-	public String getContact() {
-		return Contact;
-	}
+    /**
+     * @return the contact
+     */
+    public String getContact() {
+        return Contact;
+    }
 }
