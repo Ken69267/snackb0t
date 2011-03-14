@@ -67,9 +67,9 @@ public class IRCore {
 			e.printStackTrace();
 		}
 
-		sendMsg("NICK " + ident);
-		sendMsg("USER " + ident + " " + network + " bla :" + ident);
-		sendMsg("PRIVMSG NickServ :identify " + password);
+		sendMsgQueitly("NICK " + ident);
+		sendMsgQueitly("USER " + ident + " " + network + " bla :" + ident);
+		sendMsgQueitly("PRIVMSG NickServ :identify " + password);
 
 		return s;
 	}
@@ -95,7 +95,27 @@ public class IRCore {
 	 */
 	private void sendMsg(String msg) {
 		msg = msg + "\r\n";
-		System.out.println("Message: " + msg);
+        System.out.println("Message: " + msg);
+		try {
+			out.write(msg);
+			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Private method to send irc messages to the socket
+	 * 
+	 * Adds '\r\n' to the end of messages.
+     *
+     * Not printed to console
+	 * 
+	 * @param msg
+	 *            - The msg to be sent
+	 */
+	private void sendMsgQueitly(String msg) {
+		msg = msg + "\r\n";
 		try {
 			out.write(msg);
 			out.flush();
