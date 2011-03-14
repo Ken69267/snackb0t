@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010 Kenneth Prugh
+ * Copyright (C) 2010-2011 Kenneth Prugh
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -165,7 +165,7 @@ public class Snack {
 	 * Increase the snackCount for the current snack by 1
 	 */
 	private void updateSnackCount() {
-		selectStatement = "UPDATE snacks SET \"snackCount\" = \"snackCount\" + 1 WHERE id = ?";
+		selectStatement = "UPDATE snacks SET snackcount = snackcount + 1 WHERE id = ?";
 		try {
 			prepStmt = db.prepareStatement(selectStatement);
 			prepStmt.setInt(1, prevSnack);
@@ -234,10 +234,10 @@ public class Snack {
 	private void castVote(int id, String vote) throws SQLException {
 		if (vote.equals("+")) {
 			// user voted snack up
-			selectStatement = "UPDATE snacks SET \"voteCount\" = \"voteCount\" + 1 WHERE id = ?";
+			selectStatement = "UPDATE snacks SET votecount = votecount + 1 WHERE id = ?";
 		} else {
 			// user voted snack down
-			selectStatement = "UPDATE snacks SET \"voteCount\" = \"voteCount\" - 1 WHERE id = ?";
+			selectStatement = "UPDATE snacks SET votecount = votecount - 1 WHERE id = ?";
 		}
 		prepStmt = db.prepareStatement(selectStatement);
 		prepStmt.setInt(1, id);
