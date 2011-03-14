@@ -35,7 +35,7 @@ public class IRCUtils {
 	 *            - The message to parse
 	 */
 	public static String getIdent(String message) {
-		Pattern pattern = Pattern.compile("!n=(.*?)@");
+		Pattern pattern = Pattern.compile("!~(.*?)@");
 		Matcher matcher = pattern.matcher(message);
 		if (matcher.find()) {
 			return matcher.group(1);
