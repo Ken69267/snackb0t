@@ -12,6 +12,8 @@ package irc;
 public class Message {
     public final String msg;
     public final String user;
+    public final String ident;
+    public final String host;
     public final String channel;
     public final String command;
     private boolean bcommand;
@@ -20,6 +22,8 @@ public class Message {
         user = IRCUtils.getSender(input);
         channel = IRCUtils.getChannel(input);
         msg = IRCUtils.getMessage(input);
+        ident = IRCUtils.getIdent(input);
+        host = IRCUtils.getHostname(input);
 
         if (msg.startsWith("!")) {
             // possibly a command

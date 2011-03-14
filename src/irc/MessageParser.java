@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import modules.Auth;
 import modules.BanUser;
 import modules.Dice;
 import modules.GBug;
@@ -33,6 +34,7 @@ public class MessageParser {
     private IRCore irc;
 
     private final Postgres pg = Postgres.getInstance();
+    private final Auth authEngine = new Auth();
 
     private final IRCCtcp ctcpEngine = new IRCCtcp();
 
@@ -91,8 +93,10 @@ public class MessageParser {
                  * Its a user command
                  */
 
-                // TODO Actually check for authentication
-                authenticatedCommand(m);
+                if (authEngine.isAuthenticated(m.ident, m.host)) {
+                    authenticatedCommand(m);
+                }
+
                 parseCommand(m);
             }
 
