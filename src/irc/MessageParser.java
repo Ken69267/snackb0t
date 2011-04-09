@@ -167,7 +167,7 @@ public class MessageParser {
         }
 
         if (m.command.equals("newsnack")) {
-            irc.sendMsgTo("#" + m.channel, m.user, snackEngine.addSnack(m.msg));
+            irc.sendMsgTo("#" + m.channel, m.user, snackEngine.addSnack(m.msg, m.user));
         }
 
         if (m.command.equals("weather")) {

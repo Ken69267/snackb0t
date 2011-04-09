@@ -116,15 +116,16 @@ public class Snack {
 		return snackResult + " (#" + snackid + ")";
 	}
 
-	public String addSnack(String snack) {
-		snack = snack.substring(9).trim();
+	public String addSnack(final String msg, final String user) {
+		final String snack = msg.substring(9).trim();
 		if (snack.length() == 0) {
 			return "Screw off wise guy";
 		}
-		selectStatement = "INSERT INTO snacks (snack) VALUES(?)";
+		selectStatement = "INSERT INTO snacks (snack, by) VALUES(?, ?)";
 		try {
 			prepStmt = db.prepareStatement(selectStatement);
 			prepStmt.setString(1, snack);
+			prepStmt.setString(2, user);
 			prepStmt.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
