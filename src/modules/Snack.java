@@ -247,9 +247,10 @@ public class Snack {
 
 	/* Holds the current votes for snacks */
 	static class Votes {
+		// snack id, list of users that have voted
 		Map<Integer, ArrayList<String>> votemap;
 		public Votes() {
-			votemap = new HashMap<Integer, ArrayList<String>>();			
+			votemap = new HashMap<Integer, ArrayList<String>>();
 		}
 
 		/**
