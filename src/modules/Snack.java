@@ -79,12 +79,14 @@ public class Snack {
 	public String getSnack() {
 		int snackid = snackArray.get(rgen.nextInt(snackArray.size()));
 		String snackResult = null;
+		int votecount = 0;
+
 		/*
 		 * Let us cache the result so we may delete it if needed
 		 */
 		prevSnack = snackid;
 
-		String selectStatement = "SELECT snack FROM snacks WHERE id = ? ";
+		String selectStatement = "SELECT snack,votecount FROM snacks WHERE id = ? ";
 		try {
 			prepStmt = db.prepareStatement(selectStatement);
 			prepStmt.setInt(1, snackid);
@@ -93,6 +95,7 @@ public class Snack {
 			if (rs.next()) {
 				// snack is present
 				snackResult = rs.getString(1);
+				votecount = rs.getInt(2);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -113,7 +116,7 @@ public class Snack {
 		votes.clearVotes(snackid);
 		updateSnackCount();
 
-		return snackResult + " (#" + snackid + ")";
+		return snackResult + " (#" + snackid + "|k: " + votecount + ")";
 	}
 
 	public String addSnack(final String msg, final String user) {
