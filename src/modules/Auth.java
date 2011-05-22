@@ -19,40 +19,40 @@ import java.sql.SQLException;
 import database.Postgres;
 
 public class Auth {
-    private final Connection pg = Postgres.getInstance().getConnection();
-	private PreparedStatement prepStmt;
-	private ResultSet rs;
+    private static final Connection pg = Postgres.getInstance().getConnection();
+    private static PreparedStatement prepStmt;
+    private static ResultSet rs;
 
-    public boolean isAuthenticated(String ident, String host) {
+    public static boolean isAuthenticated(String ident, String host) {
         boolean auth = false;
-		try {
-			String selectStatement = "SELECT host FROM auth where ident = ?";
-			prepStmt = pg.prepareStatement(selectStatement);
-			prepStmt.setString(1, ident);
+        try {
+            String selectStatement = "SELECT host FROM auth where ident = ?";
+            prepStmt = pg.prepareStatement(selectStatement);
+            prepStmt.setString(1, ident);
 
-			rs = prepStmt.executeQuery();
-			if (rs.next()) {
-				// nick is present
+            rs = prepStmt.executeQuery();
+            if (rs.next()) {
+                // nick is present
                 // test against user
                 String sqlhost = rs.getString(1);
                 if (host.equals(sqlhost)) {
                     auth = true;
                 }
             }
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			if (prepStmt != null) {
-				try {
-					prepStmt.close();
-				} catch (SQLException e) {}
-			}
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {}
-			}
-		}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (prepStmt != null) {
+                try {
+                    prepStmt.close();
+                } catch (SQLException e) {}
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {}
+            }
+        }
 
         return auth;
     }
