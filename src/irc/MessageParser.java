@@ -34,7 +34,6 @@ public class MessageParser {
     private IRCore irc;
 
     private final Postgres pg = Postgres.getInstance();
-    private final Auth authEngine = new Auth();
 
     private final IRCCtcp ctcpEngine = new IRCCtcp();
 
@@ -93,7 +92,7 @@ public class MessageParser {
                  * Its a user command
                  */
 
-                if (authEngine.isAuthenticated(m.ident, m.host)) {
+                if (m.isAdmin()) {
                     authenticatedCommand(m);
                 }
 

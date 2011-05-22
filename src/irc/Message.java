@@ -9,6 +9,8 @@
 
 package irc;
 
+import modules.Auth;
+
 public class Message {
     public final String msg;
     public final String user;
@@ -16,7 +18,8 @@ public class Message {
     public final String host;
     public final String channel;
     public final String command;
-    private boolean bcommand;
+    private final boolean bAdmin;
+    private final boolean bcommand;
 
     public Message(String input) {
         user = IRCUtils.getSender(input);
@@ -33,6 +36,7 @@ public class Message {
             bcommand = false;
             command = null;
         }
+        bAdmin = Auth.isAuthenticated(ident, host);
     }
 
     public boolean isCommand() {
@@ -41,5 +45,9 @@ public class Message {
 
     public String toString() {
         return "MSGOBJ: USER:" + user + " CHAN:" + channel + " MSG:" + msg;
+    }
+
+    public boolean isAdmin() {
+        return bAdmin;
     }
 }
