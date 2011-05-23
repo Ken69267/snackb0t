@@ -59,7 +59,7 @@ public class Faq {
      * !faq add topic entry
      */
     private static String addEntry(Message m) {
-        String[] input = m.msg.split(" ", 3);
+        String[] input = m.msg.split(" ", 4);
 
         rs = null;
         prepStmt = null;
@@ -106,7 +106,7 @@ public class Faq {
      * !faq remove topic
      */
     private static String removeEntry(Message m) {
-        String[] input = m.msg.split(" ", 2);
+        String[] input = m.msg.split(" ", 3);
 
         rs = null;
         prepStmt = null;
@@ -145,7 +145,7 @@ public class Faq {
      * !faq topic
      */
     private static String getEntry(Message m) {
-        String[] input = m.msg.split(" ", 1);
+        String[] input = m.msg.split(" ", 2);
 
         rs = null;
         prepStmt = null;
