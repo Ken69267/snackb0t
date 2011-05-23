@@ -28,6 +28,7 @@ import modules.Snack;
 import modules.Weather;
 import modules.calc;
 import modules.gcalc;
+import modules.Faq;
 import database.Postgres;
 
 public class MessageParser {
@@ -230,6 +231,10 @@ public class MessageParser {
         if (m.command.equals("lastspoke")) {
             irc.sendMsgTo("#" + m.channel, m.user,
                     lastSpokeEngine.getLastSpoke(m.msg.substring(10).trim()));
+        }
+
+        if (m.command.equals("faq")) {
+            irc.sendMsgTo("#" + m.channel, m.user, Faq.parseInput(m));
         }
 
 		/* Doesn't really work
