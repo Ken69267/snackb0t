@@ -31,7 +31,15 @@ public class Faq {
     private static ResultSet rs;
 
     public static String parseInput(Message m) {
-        String input = m.msg.split(" ", 3)[1].trim();
+        String input;
+        try
+        { 
+            input = m.msg.split(" ", 3)[1].trim();
+        }
+        catch (ArrayIndexOutOfBoundsException e)
+        {
+            return "Usage: !faq topic, !faq remove topic, !faq add topic text";
+        }
 
         if (input.equals("add"))
         {
