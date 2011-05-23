@@ -65,7 +65,7 @@ public class Faq {
         prepStmt = null;
 
         try { 
-            selectStatement = "UPDATE faq SET entry = ?,user = ? WHERE topic = ? ";
+            selectStatement = "UPDATE faq SET entry = ?,usr = ? WHERE topic = ? ";
             prepStmt = db.prepareStatement(selectStatement);
             prepStmt.setString(1, input[3]);
             prepStmt.setString(2, m.ident+m.host);
@@ -77,7 +77,7 @@ public class Faq {
             }
             else
             {
-                selectStatement = "INSERT INTO faq (topic, entry, user) VALUES( ?, ?, ? )";
+                selectStatement = "INSERT INTO faq (topic, entry, usr) VALUES( ?, ?, ? )";
                 prepStmt = db.prepareStatement(selectStatement);
                 prepStmt.setString(1, input[2]);
                 prepStmt.setString(2, input[3]);
