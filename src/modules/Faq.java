@@ -31,7 +31,7 @@ public class Faq {
     private static ResultSet rs;
 
     public static String parseInput(Message m) {
-        String input = m.msg.split(" ", 2)[1].trim();
+        String input = m.msg.split(" ", 3)[1].trim();
 
         if (input.equals("add"))
         {
