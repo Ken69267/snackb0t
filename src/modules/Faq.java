@@ -77,7 +77,7 @@ public class Faq {
             prepStmt = db.prepareStatement(selectStatement);
             prepStmt.setString(1, input[3].trim());
             prepStmt.setString(2, m.ident+m.host);
-            prepStmt.setString(3, input[2].trim());
+            prepStmt.setString(3, input[2].trim().toLowerCase());
             int changed = prepStmt.executeUpdate();
             if (changed >= 1)
             {
@@ -87,7 +87,7 @@ public class Faq {
             {
                 selectStatement = "INSERT INTO faq (topic, entry, usr) VALUES( ?, ?, ? )";
                 prepStmt = db.prepareStatement(selectStatement);
-                prepStmt.setString(1, input[2].trim());
+                prepStmt.setString(1, input[2].trim().toLowerCase());
                 prepStmt.setString(2, input[3].trim());
                 prepStmt.setString(3, m.ident+m.host);
                 prepStmt.execute();
@@ -122,7 +122,7 @@ public class Faq {
         try { 
             selectStatement = "DELETE FROM faq WHERE topic = ? ";
             prepStmt = db.prepareStatement(selectStatement);
-            prepStmt.setString(1, input[2].trim());
+            prepStmt.setString(1, input[2].trim().toLowerCase());
             int changed = prepStmt.executeUpdate();
             if (changed >= 1)
             {
@@ -161,7 +161,7 @@ public class Faq {
         try { 
             selectStatement = "SELECT entry FROM faq WHERE topic = ? ";
             prepStmt = db.prepareStatement(selectStatement);
-            prepStmt.setString(1, input[1].trim());
+            prepStmt.setString(1, input[1].trim().toLowerCase());
             rs = prepStmt.executeQuery();
             if (rs.next())
             {
