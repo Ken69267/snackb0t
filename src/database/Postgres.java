@@ -26,7 +26,7 @@ public class Postgres {
         try {
             Class.forName("org.postgresql.Driver");
             db = DriverManager.getConnection(config.getDbpath(),config.getDbuser(), config.getDbpass());
-            final String DBEncoding = "UNICODE";
+            final String DBEncoding = "UTF8";
             PreparedStatement statement = db
                 .prepareStatement("SET CLIENT_ENCODING TO '" + DBEncoding + "'");
             statement.execute();
