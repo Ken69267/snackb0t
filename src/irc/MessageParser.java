@@ -127,8 +127,8 @@ public class MessageParser {
             }
         }
 
-        if (m.command.equals("jAnnihilateSnack")) {
-            irc.sendPrivMsgTo(m.user, snackEngine.deleteSnack());
+        if (m.command.equals("jDeleteSnack")) {
+            irc.sendPrivMsgTo(m.user, snackEngine.deleteSnack(m.msg));
         }
 
         if (m.command.equals("jbanUser")) {

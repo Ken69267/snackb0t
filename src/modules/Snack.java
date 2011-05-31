@@ -144,16 +144,34 @@ public class Snack {
         return "snack added to database";
     }
 
-    public String deleteSnack() {
+    /* "!jDeleteSnack int"
+     */
+    public String deleteSnack(String msg) {
+        int dsnackid = -1;
+
+        try
+        { 
+             dsnackid = Integer.parseInt(msg.split(" ")[1].trim());
+        }
+        catch (ArrayIndexOutOfBoundsException e)
+        {
+            return "Invalid input";
+        }
+
+        if (dsnackid < 0)
+        {
+            return "Invalid input";
+        }
+
         selectStatement = "DELETE FROM snacks WHERE id = ?";
         try {
             prepStmt = db.prepareStatement(selectStatement);
-            prepStmt.setInt(1, prevSnack);
+            prepStmt.setInt(1, dsnackid);
             prepStmt.execute();
 
             updateSnackArray();
 
-            return "Snack Terminated";
+            return "snack #" + dsnackid + " deleted";
         } catch (SQLException e) {
             return "Database error";
         } finally {
