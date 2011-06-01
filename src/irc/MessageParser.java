@@ -29,6 +29,7 @@ import modules.Weather;
 import modules.calc;
 import modules.gcalc;
 import modules.Faq;
+import modules.ChannelFilter;
 import database.Postgres;
 
 public class MessageParser {
@@ -97,7 +98,18 @@ public class MessageParser {
                     authenticatedCommand(m);
                 }
 
-                parseCommand(m);
+                /* This is where we can enforce per channel command filtering.
+                 * However, it's going to be ugly as it will be comparing the
+                 * message vs say, !jDisable !snack to disable !snacks
+                 */
+                if (ChannelFilter.isCommandFiltered(m))
+                {
+                    // filter message
+                }
+                else
+                {
+                    parseCommand(m);
+                }
             }
 
             /*
@@ -137,6 +149,14 @@ public class MessageParser {
 
         if (m.command.equals("junbanUser")) {
             banEngine.unbanUser(m.msg.substring(11).trim());
+        }
+
+        if (m.command.equals("junfilter")) {
+            irc.sendMsgTo("#" + m.channel, m.user, ChannelFilter.disableFilter(m));
+        }
+
+        if (m.command.equals("jfilter")) {
+            irc.sendMsgTo("#" + m.channel, m.user, ChannelFilter.enableFilter(m));
         }
     }
 
