@@ -95,7 +95,7 @@ public class ChannelFilter {
             prepStmt.setString(2, command);
             prepStmt.execute();
 
-            return "command " + command + " enabled on channel " + m.channel;
+            return "command " + command + " disabled on channel " + m.channel;
         } catch (SQLException e) {
             return "Database error";
         } finally {
