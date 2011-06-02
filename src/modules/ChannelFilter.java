@@ -43,14 +43,14 @@ public class ChannelFilter {
         int command_id = -1;
 
         channel_id = getChanID(m.channel);
-        command_id = getCommID(command);
+        command_id = getCommID(m.command);
 
         try
         { 
             selectStatement = "SELECT * FROM filtered_commands, WHERE (chan_id = ?) AND (comm_id = ?)";
             prepStmt = db.prepareStatement(selectStatement);
-            prepStmt.setString(1, channel_id);
-            prepStmt.setString(2, command_id);
+            prepStmt.setInt(1, channel_id);
+            prepStmt.setInt(2, command_id);
             rs = prepStmt.executeQuery();
             if (rs.next())
             {
