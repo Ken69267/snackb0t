@@ -122,6 +122,40 @@ public class ChannelFilter {
         }
     }
 
+    private static void insertChannel(String channel)
+    {
+        selectStatement = "INSERT INTO channels (channel) VALUES(?)";
+        try { 
+            prepStmt = db.prepareStatement(selectStatement);
+            prepStmt.setString(1, channel);
+            prepStmt.execute();
+        } catch (SQLException e) {
+        } finally {
+            if (prepStmt != null) {
+                try { 
+                    prepStmt.close();
+                } catch (SQLException e) {}
+            }
+        }
+    }
+
+    private static void insertCommand(String command)
+    {
+        selectStatement = "INSERT INTO commands (command) VALUES(?)";
+        try { 
+            prepStmt = db.prepareStatement(selectStatement);
+            prepStmt.setString(1, command);
+            prepStmt.execute();
+        } catch (SQLException e) {
+        } finally {
+            if (prepStmt != null) {
+                try { 
+                    prepStmt.close();
+                } catch (SQLException e) {}
+            }
+        }
+    }
+
     public static String enableFilter(final Message m)
     {
         String command;
@@ -143,7 +177,18 @@ public class ChannelFilter {
         int command_id = -1;
 
         channel_id = getChanID(m.channel);
+        if (channel_id == -1)
+        {
+            insertChannel(m.channel);
+            channel_id = getChanID(m.channel);
+        }
+
         command_id = getCommID(command);
+        if (command_id == -1)
+        {
+            insertCommand(command);
+            command_id = getCommID(command);
+        }
 
         selectStatement = "INSERT INTO filtered_commands (chan_id, comm_id) VALUES(?, ?) ";
         try
