@@ -41,7 +41,7 @@ public class ChannelFilter {
 
         try
         { 
-            selectStatement = "SELECT command FROM channelfilter WHERE channel = ? and command = ?";
+            selectStatement = "SELECT * FROM filtered_commands, channels, commands WHERE (channel = ?) AND (command = ?)";
             prepStmt = db.prepareStatement(selectStatement);
             prepStmt.setString(1, m.channel);
             prepStmt.setString(2, m.command);
@@ -70,6 +70,58 @@ public class ChannelFilter {
         }
     }
 
+    private static int getChanID(String channel)
+    {
+        selectStatement = "SELECT chan_id FROM channels where channel = ?";
+        try { 
+            prepStmt = db.prepareStatement(selectStatement);
+            prepStmt.setString(1, channel);
+            rs = prepStmt.executeQuery();
+            if (rs.next())
+            {
+                return rs.getInt("chan_id");
+            }
+            else
+            {
+                return -1;
+            }
+        } catch (SQLException e) {
+            return -1;
+        } finally {
+            if (prepStmt != null) {
+                try { 
+                    prepStmt.close();
+                } catch (SQLException e) {}
+            }
+        }
+    }
+
+    private static int getCommID(String command)
+    {
+        selectStatement = "SELECT comm_id FROM commands where command = ?";
+        try { 
+            prepStmt = db.prepareStatement(selectStatement);
+            prepStmt.setString(1, command);
+            rs = prepStmt.executeQuery();
+            if (rs.next())
+            {
+                return rs.getInt("comm_id");
+            }
+            else
+            {
+                return -1;
+            }
+        } catch (SQLException e) {
+            return -1;
+        } finally {
+            if (prepStmt != null) {
+                try { 
+                    prepStmt.close();
+                } catch (SQLException e) {}
+            }
+        }
+    }
+
     public static String enableFilter(final Message m)
     {
         String command;
@@ -87,12 +139,18 @@ public class ChannelFilter {
             return "Invalid input";
         }
 
-        selectStatement = "INSERT INTO channelfilter (channel, command) VALUES(?, ?) ";
+        int channel_id = -1;
+        int command_id = -1;
+
+        channel_id = getChanID(m.channel);
+        command_id = getCommID(command);
+
+        selectStatement = "INSERT INTO filtered_commands (chan_id, comm_id) VALUES(?, ?) ";
         try
         {
             prepStmt = db.prepareStatement(selectStatement);
-            prepStmt.setString(1, m.channel);
-            prepStmt.setString(2, command);
+            prepStmt.setInt(1, channel_id);
+            prepStmt.setInt(2, command_id);
             prepStmt.execute();
 
             return "command " + command + " disabled on channel " + m.channel;
@@ -124,12 +182,18 @@ public class ChannelFilter {
             return "Invalid input";
         }
 
-        selectStatement = "DELETE FROM channelfilter WHERE channel = ? and command = ?";
+        int channel_id = -1;
+        int command_id = -1;
+
+        channel_id = getChanID(m.channel);
+        command_id = getCommID(command);
+
+        selectStatement = "DELETE FROM filtered_commands WHERE chan_id = ? and comm_id = ?";
         try
         {
             prepStmt = db.prepareStatement(selectStatement);
-            prepStmt.setString(1, m.channel);
-            prepStmt.setString(2, command);
+            prepStmt.setInt(1, channel_id);
+            prepStmt.setInt(2, command_id);
             int changed = prepStmt.executeUpdate();
 
             if (changed >= 1)
