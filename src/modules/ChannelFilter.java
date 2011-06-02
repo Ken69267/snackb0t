@@ -47,7 +47,7 @@ public class ChannelFilter {
 
         try
         { 
-            selectStatement = "SELECT * FROM filtered_commands, WHERE (chan_id = ?) AND (comm_id = ?)";
+            selectStatement = "SELECT * FROM filtered_commands WHERE (chan_id = ?) AND (comm_id = ?)";
             prepStmt = db.prepareStatement(selectStatement);
             prepStmt.setInt(1, channel_id);
             prepStmt.setInt(2, command_id);
