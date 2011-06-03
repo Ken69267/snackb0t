@@ -165,7 +165,7 @@ public class Faq {
             rs = prepStmt.executeQuery();
             if (rs.next())
             {
-                return input[1] + ": " + rs.getString(1);
+                return input[1].trim() + ": " + rs.getString(1);
             }
             else
             {
