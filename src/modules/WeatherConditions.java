@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2010 Kenneth Prugh
+ * Copyright (C) 2009-2011 Kenneth Prugh
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -116,16 +116,16 @@ class WeatherData {
 
 		sb.append(area);
 		sb.append(". ");
-		sb.append("The Temperature is ");
+		sb.append("Temperature: ");
 		sb.append(temp);
 		sb.append(" with ");
 		sb.append(humidity);
 		sb.append(" humidity. ");
-		sb.append("The weather is ");
-		sb.append(condition);
+		sb.append("Conditions: ");
+		sb.append(condition.toLowerCase());
 		sb.append(" with wind ");
-		sb.append(wind);
-		sb.append("The barometric pressure is ");
+		sb.append(wind.toLowerCase().trim());
+		sb.append(". Barometric pressure: ");
 		sb.append(pressure);
 		sb.append(". ");
 		sb.append(time);
