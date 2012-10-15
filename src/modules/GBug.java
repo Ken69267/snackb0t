@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2011 Kenneth Prugh
+ * Copyright (C) 2009-2012 Kenneth Prugh
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -9,7 +9,7 @@
 
 package modules;
 
-import java.io.IOException;
+import java.io.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,6 +18,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
@@ -39,14 +41,22 @@ public class GBug {
 
             // Using factory get an instance of document builder
             DocumentBuilder db = dbf.newDocumentBuilder();
+            db.setEntityResolver(new EntityResolver() {
+                @Override
+                public InputSource resolveEntity(String publicId, String systemId) {
+                    // it might be a good idea to insert a trace logging here that you are ignoring publicId/systemId
+                    return new InputSource(new StringReader("")); // Returns a valid dummy source
+                }
+            });
 
             // parse using builder to get DOM representation of the XML file
             Document dom;
             try {
                 dom = db
-                    .parse("http://bugs.gentoo.org/show_bug.cgi?ctype=xml&id="
+                    .parse("https://bugs.gentoo.org/show_bug.cgi?ctype=xml&id="
                             + bugID);
             } catch (SAXParseException e) {
+                System.out.println(e);
                 return "Invalid Bug";
             }
 
@@ -130,12 +140,12 @@ public class GBug {
         return tagValue;
     }
 
-    ///**
-    // * @param args
-    // */
-    //public static void main(String[] args) {
-    //    GBug gb = new GBug();
-    //    String foo = gb.getBug("314501");
-    //    System.out.println(foo);
-    //}
+//    ///**
+//    // * @param args
+//    // */
+//    public static void main(String[] args) {
+//        GBug gb = new GBug();
+//        String foo = gb.getBug("314501");
+//        System.out.println(foo);
+//    }
 }
