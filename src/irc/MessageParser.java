@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2011 Kenneth Prugh
+ * Copyright (C) 2009-2012 Kenneth Prugh
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -123,6 +123,10 @@ public class MessageParser {
     }
 
     protected void authenticatedCommand(final Message m) {
+        if (m.command.equals("jsay")) {
+            irc.sendMsgToChan("#" + m.channel, m.msg.substring(5).trim());
+        }
+
         if (m.command.equals("jpartChannel")) {
             irc.partChannel(m.msg.substring(13).trim());
         }
