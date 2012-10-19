@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2011 Kenneth Prugh
+ * Copyright (C) 2009-2012 Kenneth Prugh
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,14 +61,10 @@ public class IRCUtils {
 	}
 
 	/**
-	 * Return channel that sent this message
-	 * 
-	 * @param message
-	 *            - The message to parse
-	 * @return - the channel (without #)
+	 * @return - the channel (#foo)
 	 */
 	public static String getChannel(String message) {
-		Pattern pattern = Pattern.compile("#([\\w-]+)");
+		Pattern pattern = Pattern.compile("PRIVMSG (.+?) :");
 		Matcher matcher = pattern.matcher(message);
 		if (matcher.find()) {
 			return matcher.group(1);

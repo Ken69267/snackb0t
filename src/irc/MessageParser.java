@@ -77,7 +77,7 @@ public class MessageParser {
          */
         if (type.equals("PRIVMSG")) {
             //log the message
-            lastSpokeEngine.logLine(m.user, "#" + m.channel, m.msg);
+            lastSpokeEngine.logLine(m.user, m.channel, m.msg);
 
             // Ignore banned users from this point on
             if (banEngine.isBanned(m.user)) {
@@ -124,7 +124,7 @@ public class MessageParser {
 
     protected void authenticatedCommand(final Message m) {
         if (m.command.equals("jsay")) {
-            irc.sendMsgToChan("#" + m.channel, m.msg.substring(5).trim());
+            irc.sendMsgToChan(m.channel, m.msg.substring(5).trim());
         }
 
         if (m.command.equals("jpartChannel")) {
@@ -144,7 +144,7 @@ public class MessageParser {
         }
 
         if (m.command.equals("jDeleteSnack")) {
-            irc.sendMsgTo("#" + m.channel, m.user, snackEngine.deleteSnack(m.msg));
+            irc.sendMsgTo(m.channel, m.user, snackEngine.deleteSnack(m.msg));
         }
 
         if (m.command.equals("jbanUser")) {
@@ -156,11 +156,11 @@ public class MessageParser {
         }
 
         if (m.command.equals("junfilter")) {
-            irc.sendMsgTo("#" + m.channel, m.user, ChannelFilter.disableFilter(m));
+            irc.sendMsgTo(m.channel, m.user, ChannelFilter.disableFilter(m));
         }
 
         if (m.command.equals("jfilter")) {
-            irc.sendMsgTo("#" + m.channel, m.user, ChannelFilter.enableFilter(m));
+            irc.sendMsgTo(m.channel, m.user, ChannelFilter.enableFilter(m));
         }
     }
 
@@ -179,7 +179,7 @@ public class MessageParser {
 
                 while (matcher.find()) {
                     String r = bugEngine.getBug(matcher.group());
-                    irc.sendMsgTo("#" + m.channel, m.user, r);
+                    irc.sendMsgTo(m.channel, m.user, r);
                 }
             }
         }
@@ -187,37 +187,37 @@ public class MessageParser {
 
     private void parseCommand(final Message m) {
         if (m.command.equals("snack")) {
-            irc.sendMsgTo("#" + m.channel, m.user, snackEngine.getSnack());
+            irc.sendMsgTo(m.channel, m.user, snackEngine.getSnack());
         }
 
         if (m.command.equals("newsnack")) {
-            irc.sendMsgTo("#" + m.channel, m.user, snackEngine.addSnack(m.msg, m.user));
+            irc.sendMsgTo(m.channel, m.user, snackEngine.addSnack(m.msg, m.user));
         }
 
         if (m.command.equals("weather")) {
-            irc.sendMsgTo("#" + m.channel, m.user,
+            irc.sendMsgTo(m.channel, m.user,
                     weatherEngine.getWeather(m.user, m.msg));
         }
 
         if (m.command.equals("forecast")) {
             List<String> results = weatherEngine.getForecast(m.user, m.msg);
             for (String cast : results) {
-                irc.sendMsgTo("#" + m.channel, m.user, cast);
+                irc.sendMsgTo(m.channel, m.user, cast);
             }
         }
 
         if (m.command.equals("calc")) {
-            irc.sendMsgTo("#" + m.channel, m.user,
+            irc.sendMsgTo(m.channel, m.user,
                     calcEngine.getCalculation(m.msg, m.user));
         }
 
 
         if (m.command.equals("8ball")) {
-            irc.sendMsgTo("#" + m.channel, m.user, m8Engine.getAnswer());
+            irc.sendMsgTo(m.channel, m.user, m8Engine.getAnswer());
         }
 
         if (m.command.equals("roll")) {
-            irc.sendMsgTo("#" + m.channel, m.user, diceEngine.rollDie(m.msg));
+            irc.sendMsgTo(m.channel, m.user, diceEngine.rollDie(m.msg));
         }
 
         if (m.command.equals("help")) {
@@ -233,37 +233,37 @@ public class MessageParser {
         }
 
         if (m.command.equals("vote")) {
-            irc.sendMsgTo("#" + m.channel, m.user, snackEngine.voteSnack(m.msg, m.user));
+            irc.sendMsgTo(m.channel, m.user, snackEngine.voteSnack(m.msg, m.user));
         }
 
         if (m.command.equals("date")) {
-            irc.sendMsgTo("#" + m.channel, m.user, dateEngine.getDate());
+            irc.sendMsgTo(m.channel, m.user, dateEngine.getDate());
         }
 
         /* Exploitable!
         if (m.command.equals("meta")) {
-            irc.sendMsgTo("#" + m.channel, m.user, metaEngine.getMetadata(m.msg));
+            irc.sendMsgTo(m.channel, m.user, metaEngine.getMetadata(m.msg));
         }
         */
 
         // Ask NickServ when the m.user was last seen
         if (m.command.equals("seen")) {
-            irc.sendMsgTo("#" + m.channel, m.user,
+            irc.sendMsgTo(m.channel, m.user,
                     lastSpokeEngine.getLastSpoke(m.msg.substring(5).trim()));
         }
 
         if (m.command.equals("lastspoke")) {
-            irc.sendMsgTo("#" + m.channel, m.user,
+            irc.sendMsgTo(m.channel, m.user,
                     lastSpokeEngine.getLastSpoke(m.msg.substring(10).trim()));
         }
 
         if (m.command.equals("faq")) {
-            irc.sendMsgTo("#" + m.channel, m.user, Faq.parseInput(m));
+            irc.sendMsgTo(m.channel, m.user, Faq.parseInput(m));
         }
 
 		/* Doesn't really work
         if (m.command.equals("convert")) {
-            irc.sendMsgTo("#" + m.channel, m.user, gcalc.convert(m.msg));
+            irc.sendMsgTo(m.channel, m.user, gcalc.convert(m.msg));
         }
 		*/
     }
