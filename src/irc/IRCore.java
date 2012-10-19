@@ -112,7 +112,8 @@ public class IRCore {
             {
                 // We are in luck, we are splitting where a space is!
                 wrapped.add(line.substring(0, limit-1));
-                return rwrap(line.substring(limit), limit, wrapped);
+                String newline = line.substring(limit);
+                return rwrap(newline, limit, wrapped);
             }
             else
             {
@@ -126,11 +127,13 @@ public class IRCore {
                 if (iter == 0)
                 {
                     wrapped.add( line.substring(0, limit));
-                    return rwrap(line.substring(limit), limit, wrapped);
+                    String newline = line.substring(limit);
+                    return rwrap(newline, limit, wrapped);
                 }
 
                 wrapped.add( line.substring(0, iter+1));
-                return rwrap(line.substring(iter+1), limit, wrapped);
+                String newline = line.substring(iter+1);
+                return rwrap(newline, limit, wrapped);
             }
         }
     }
