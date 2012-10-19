@@ -119,7 +119,7 @@ public class IRCore {
             {
                 int iter = limit-1;
                 // scan backwards until we find a space in the line
-                while (iter >= 0 && line.charAt(iter) != ' ')
+                while (iter > 0 && line.charAt(iter) != ' ')
                 {
                     --iter;
                 }
