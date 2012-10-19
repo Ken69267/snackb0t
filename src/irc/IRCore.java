@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2010 Kenneth Prugh
+ * Copyright (C) 2009-2012 Kenneth Prugh
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
+import java.util.List;
+import java.util.ArrayList;
 
 import config.Config;
 
@@ -80,29 +83,121 @@ public class IRCore {
 	 * @throws IOException
 	 */
 	public void disconnect() throws IOException {
-		sendMsg("QUIT :System Hault");
+		sendMsgUnfiltered("QUIT :System Hault");
 		s.close();
 		System.exit(0);
 	}
+
+    /**
+     * Recursive word wrap
+     *
+     * line - The remaining raw msg to be wrapped
+     * limit - Max length of a line to be wrapped
+     * wrapped - List of wrapped strings already processed
+     */
+    private List<String> rwrap(String line, int limit, List<String> wrapped)
+    {
+        line = line.trim();
+
+        if (line.length() <= limit)
+        {
+            wrapped.add(line);
+            return wrapped;
+        }
+        else
+        {
+            if (line.charAt(limit-1) == ' ')
+            {
+                // We are in luck, we are splitting where a space is!
+                wrapped.add(line.substring(0, limit-1));
+                line = line.substring(limit);
+                return rwrap(line, limit, wrapped);
+            }
+            else
+            {
+                int iter = limit-1;
+                // scan backwards until we find a space in the line
+                while (line.charAt(iter) != ' ' && iter >= 0)
+                {
+                    --iter;
+                }
+                // the line is one giant word, slice it at max len
+                if (iter == 0)
+                {
+                    wrapped.add( line.substring(0, limit));
+                    line = line.substring(limit);
+                    return rwrap(line, limit, wrapped);
+                }
+
+                wrapped.add( line.substring(0, iter+1));
+                line = line.substring(iter+1);
+                return rwrap(line, limit, wrapped);
+            }
+        }
+    }
+
+    /**
+     * Wraps the given string at the given length, and returns the resultant
+     * list
+     */
+    private List<String> wrap(String line, int limit)
+    {
+        List<String> wrapped = new ArrayList<String>();
+
+        return rwrap(line, limit, wrapped);
+    }
 
 	/**
 	 * Private method to send irc messages to the socket
 	 * 
 	 * Adds '\r\n' to the end of messages.
-	 * 
-	 * @param msg
-	 *            - The msg to be sent
 	 */
-	private void sendMsg(String msg) {
-		msg = msg + "\r\n";
-        System.out.println("Message: " + msg);
-		try {
-			out.write(msg);
-			out.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	private void sendMsg(String target, String msg) {
+        // Limit max msg length to 400 arbitarily until proper max length is
+        // calculated for IRC
+        int magic_limit = 400;
+        if (msg.length() > magic_limit)
+        {
+            //wrap
+            for (String line : wrap(msg, magic_limit))
+            {
+                line = target + line + "\r\n";
+                System.out.println("Message: " + line);
+                try {
+                    out.write(line);
+                    out.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        else
+        {
+            msg = target + msg + "\r\n";
+            System.out.println("Message: " + msg);
+            try {
+                out.write(msg);
+                out.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 	}
+
+    /**
+     * Send msg to socket without checkign for multiline or filtering it at all
+     */
+    private void sendMsgUnfiltered(String msg)
+    {
+        msg = msg + "\r\n";
+        System.out.println("Message: " + msg);
+        try {
+            out.write(msg);
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 	/**
 	 * Private method to send irc messages to the socket
@@ -129,42 +224,34 @@ public class IRCore {
 	 */
 	public void sendNotice(String user, String msg) {
 		String tmpMsg = "NOTICE " + user + " :" + msg;
-		sendMsg(tmpMsg);
+		sendMsgUnfiltered(tmpMsg);
 	}
 
 	/**
 	 * Send a message to the specified channel and user.
-	 * 
-	 * @param channel
-	 *            - The #channel the message is sent to
-	 * @param user
-	 *            - The user who should receive the message
-	 * @param msg
-	 *            - The contents of the msg to be sent
+     *
+     * Can handle multiline string
 	 */
 	public void sendMsgTo(String channel, String user, String msg) {
-		String tmpMsg = "PRIVMSG " + channel + " :" + user + ": " + msg;
-		sendMsg(tmpMsg);
+		String tmpMsg = "PRIVMSG " + channel + " :" + user + ": ";
+		sendMsg(tmpMsg, msg);
 	}
 
 	/**
 	 * Send a query/private message to user
-	 * 
-	 * @param user
-	 *            - The user to query
-	 * @param msg
-	 *            - The query message
 	 */
 	public void sendPrivMsgTo(String user, String msg) {
-		String tmpMsg = "PRIVMSG " + user + " :" + msg;
-		sendMsg(tmpMsg);
+		String tmpMsg = "PRIVMSG " + user + " :";
+		sendMsg(tmpMsg, msg);
 	}
 
     /**
      * Send message to channel
+     *
+     * Currently unfiltered because only admin commands can msg a channel
      */
     public void sendMsgToChan(String channel, String msg) {
-        sendMsg("PRIVMSG " + channel + " :" + msg);
+        sendMsgUnfiltered("PRIVMSG " + channel + " :" + msg);
     }
 
 	/**
@@ -175,7 +262,7 @@ public class IRCore {
 	 */
 	public void joinChannel(String chan) {
 		String tmp = "JOIN " + chan;
-		sendMsg(tmp);
+		sendMsgUnfiltered(tmp);
 	}
 
 	/**
@@ -186,7 +273,7 @@ public class IRCore {
 	 */
 	public void partChannel(String chan) {
 		String tmp = "PART " + chan;
-		sendMsg(tmp);
+		sendMsgUnfiltered(tmp);
 	}
 
 	public void setIn(BufferedReader in) {
@@ -201,6 +288,6 @@ public class IRCore {
      * PONG the specified server
      */
     public void doPong(String server) {
-        sendMsg("PONG " + server);
+        sendMsgUnfiltered("PONG " + server);
     }
 }
