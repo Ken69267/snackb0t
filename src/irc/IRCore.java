@@ -161,7 +161,8 @@ public class IRCore {
         if (msg.length() > magic_limit)
         {
             //wrap
-            for (String line : wrap(msg, magic_limit))
+            List<String> lines = wrap(msg, magic_limit);
+            for (String line : lines)
             {
                 line = target + line + "\r\n";
                 System.out.println("Message: " + line);
