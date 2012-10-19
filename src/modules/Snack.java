@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010-2011 Kenneth Prugh
+ * Copyright (C) 2010-2012 Kenneth Prugh
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -141,7 +141,7 @@ public class Snack {
             }
         }
         updateSnackArray();
-        return "snack added to database";
+        return "snack #" + snackArray.get(snackArray.size() -1) + " added to database";
     }
 
     /* "!jDeleteSnack int"
