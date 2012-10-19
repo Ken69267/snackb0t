@@ -97,8 +97,6 @@ public class IRCore {
      */
     private List<String> rwrap(String line, int limit, List<String> wrapped)
     {
-
-        System.out.println("Calling rwap on line: " + line);
         line = line.trim();
 
         if (line.length() <= limit)
