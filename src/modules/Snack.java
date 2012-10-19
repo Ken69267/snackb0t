@@ -163,6 +163,11 @@ public class Snack {
             return "Invalid input";
         }
 
+        if (!snackArray.contains(dsnackid))
+        {
+            return "snack #" + dsnackid + " doesn't exist";
+        }
+
         selectStatement = "DELETE FROM snacks WHERE id = ?";
         try {
             prepStmt = db.prepareStatement(selectStatement);
