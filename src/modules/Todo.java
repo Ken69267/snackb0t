@@ -141,7 +141,7 @@ public class Todo {
         int todoid = -1;
         try
         { 
-            todoid = Integer.parseInt(todoString.split(" ")[1].trim());
+            todoid = Integer.parseInt(todoString.trim());
         }
         catch (ArrayIndexOutOfBoundsException e)
         {
