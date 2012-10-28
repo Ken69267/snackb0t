@@ -30,6 +30,7 @@ import modules.calc;
 import modules.gcalc;
 import modules.Faq;
 import modules.ChannelFilter;
+import modules.Todo;
 import database.Postgres;
 
 public class MessageParser {
@@ -50,6 +51,7 @@ public class MessageParser {
     private final LastSpoke lastSpokeEngine = new LastSpoke(pg);
     private final Metadata metaEngine = new Metadata();
     private final calc calcEngine = new calc();
+    private final Todo todoEngine = new Todo();
 
     public MessageParser(IRCore irc) {
         this.irc = irc;
@@ -259,6 +261,14 @@ public class MessageParser {
 
         if (m.command.equals("faq")) {
             irc.sendMsgTo(m.channel, m.user, Faq.parseInput(m));
+        }
+
+        if (m.command.equals("todo")) {
+            irc.sendMsgTo(m.channel, m.user, todoEngine.parseTodo(m));
+        }
+
+        if (m.command.equals("done")) {
+            irc.sendMsgTo(m.channel, m.user, todoEngine.deleteTodo(m));
         }
 
 		/* Doesn't really work
